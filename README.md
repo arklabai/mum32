@@ -53,6 +53,28 @@ Capture decisions right inside your IDE sidebar:
 
 ---
 
+## Publishing & Marketplace Distribution
+
+murf32 can be published to both the **Visual Studio Marketplace** (for VS Code) and the **Open VSX Registry** (for Antigravity IDE, Cursor, and Windsurf).
+
+For detailed credentials setup, token generation, and CI/CD walkthroughs, see:
+📖 **[Marketplace Publishing Guide (docs/PUBLISHING.md)](docs/PUBLISHING.md)**
+
+### Quick Commands:
+```bash
+# 1. Build and package standalone VSIX
+npm run build:all
+npx @vscode/vsce package --no-git-tag-version
+
+# 2. Publish to VS Code Marketplace
+npx @vscode/vsce publish -p <YOUR_AZURE_PAT>
+
+# 3. Publish to Open VSX (Antigravity & Cursor)
+npx ovsx publish murf32-*.vsix -p <YOUR_OVSX_TOKEN>
+```
+
+---
+
 ## License
 
 MIT © [ArkLab AI, Inc.](https://www.arklabai.com/murf32)
