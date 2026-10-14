@@ -2,6 +2,8 @@
 
 Persistent prompt memory engine and context ledger for AI coding agents (**Google Antigravity**, **Cursor**, **Windsurf**, and **VS Code**).
 
+**Official Documentation & Product Page**: [https://www.arklabai.com/murf32](https://www.arklabai.com/murf32)
+
 murf32 captures, categorizes, and remembers:
 - **Design Choices**: Typography, colors, spacing, mobile rules, component tokens.
 - **Agent Invariants**: Prohibited patterns, architecture constraints, and "never do this again" rules.
@@ -53,4 +55,4 @@ Capture decisions right inside your IDE sidebar:
 
 ## License
 
-MIT © [ArkLab AI, Inc.](https://arklab.ai)
+MIT © [ArkLab AI, Inc.](https://www.arklabai.com/murf32)

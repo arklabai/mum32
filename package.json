@@ -3,7 +3,8 @@
   "displayName": "murf32 — AI Context Ledger",
   "description": "Persistent prompt memory engine and context ledger for AI coding agents",
   "version": "0.1.0",
-  "publisher": "arklab-ai",
+  "publisher": "arklabai",
+  "homepage": "https://www.arklabai.com/murf32",
   "license": "MIT",
   "engines": {
     "vscode": "^1.85.0"
@@ -13,6 +14,9 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/arklabai/murf32"
+  },
+  "bugs": {
+    "url": "https://github.com/arklabai/murf32/issues"
   },
   "main": "./out/extension.js",
   "activationEvents": ["onStartupFinished"],

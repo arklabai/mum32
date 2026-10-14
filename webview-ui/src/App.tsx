@@ -127,7 +127,13 @@ export const App: React.FC = () => {
     <div className="min-h-screen flex flex-col bg-[#1e1e2e] text-[#cdd6f4]">
       {/* App Header & Brand */}
       <header className="px-3 pt-3 pb-2 border-b border-white/5 flex items-center justify-between">
-        <div className="flex items-center gap-2">
+        <a
+          href="https://www.arklabai.com/murf32"
+          target="_blank"
+          rel="noreferrer"
+          className="flex items-center gap-2 hover:opacity-85 transition-opacity text-inherit no-underline"
+          title="Visit https://www.arklabai.com/murf32"
+        >
           <div className="w-6 h-6 rounded-md bg-gradient-to-tr from-indigo-600 to-indigo-400 flex items-center justify-center shadow-lg shadow-indigo-500/30">
             <Sparkles size={13} className="text-white" />
           </div>
@@ -138,9 +144,11 @@ export const App: React.FC = () => {
                 v0.1.0
               </span>
             </h1>
-            <p className="text-[10px] text-white/40">AI Context Ledger & Memory</p>
+            <p className="text-[10px] text-indigo-300/60 hover:text-indigo-300 transition-colors">
+              arklabai.com/murf32 ↗
+            </p>
           </div>
-        </div>
+        </a>
 
         {/* Counter Badge */}
         <div className="text-[10px] font-mono text-white/50 bg-white/5 px-2 py-0.5 rounded border border-white/5 flex items-center gap-1.5">
