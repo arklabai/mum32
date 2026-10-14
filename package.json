@@ -1,0 +1,104 @@
+{
+  "name": "murf32",
+  "displayName": "murf32 — AI Context Ledger",
+  "description": "Persistent prompt memory engine and context ledger for AI coding agents",
+  "version": "0.1.0",
+  "publisher": "arklab-ai",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": ["Other", "Machine Learning"],
+  "keywords": ["AI", "prompt", "memory", "context", "agent", "copilot", "cursor"],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/arklabai/murf32"
+  },
+  "main": "./out/extension.js",
+  "activationEvents": ["onStartupFinished"],
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "murf32-sidebar",
+          "title": "murf32",
+          "icon": "media/sidebar-icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "murf32-sidebar": [
+        {
+          "type": "webview",
+          "id": "murf32.sidebarView",
+          "name": "Context Ledger",
+          "icon": "media/sidebar-icon.svg"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "murf32.copyContextBlock",
+        "title": "murf32: Copy Context Block",
+        "icon": "$(clippy)"
+      },
+      {
+        "command": "murf32.syncToAgentsMd",
+        "title": "murf32: Sync to AGENTS.md",
+        "icon": "$(sync)"
+      },
+      {
+        "command": "murf32.capturePrompt",
+        "title": "murf32: Capture Current Prompt from Clipboard",
+        "icon": "$(add)"
+      },
+      {
+        "command": "murf32.clearStale",
+        "title": "murf32: Clear Stale Memories",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "murf32.openSidebar",
+        "title": "murf32: Open Sidebar",
+        "icon": "$(brain)"
+      }
+    ],
+    "configuration": {
+      "title": "murf32",
+      "properties": {
+        "murf32.autoSyncOnSave": {
+          "type": "boolean",
+          "default": false,
+          "description": "Automatically sync pinned constraints to AGENTS.md on every save."
+        },
+        "murf32.cloudApiKey": {
+          "type": "string",
+          "default": "",
+          "description": "murf32 Cloud API key for multi-session vector sync (optional)."
+        },
+        "murf32.gitTrackLedger": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include .murf32/ledger.json in git tracking (share memory with team)."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run build:all",
+    "build:webview": "cd webview-ui && npm run build",
+    "build:ext": "tsc -p ./tsconfig.json",
+    "build:all": "npm run build:webview && npm run build:ext",
+    "watch:ext": "tsc -watch -p ./tsconfig.json",
+    "watch:webview": "cd webview-ui && npm run dev",
+    "compile": "npm run build:all",
+    "pretest": "npm run compile",
+    "lint": "eslint src --ext ts"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.85.0",
+    "@vscode/vsce": "^2.22.0",
+    "typescript": "^5.3.0"
+  }
+}

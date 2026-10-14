@@ -1,0 +1,45 @@
+name: Publish murf32 Extension
+
+on:
+  release:
+    types: [created]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install Dependencies
+        run: |
+          npm ci
+          cd webview-ui && npm ci
+
+      - name: Build Extension & Webview
+        run: npm run build:all
+
+      - name: Package VSIX
+        run: npx @vscode/vsce package
+
+      - name: Publish to VS Code Marketplace
+        if: env.VSCE_PAT != ''
+        env:
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}
+        run: npx @vscode/vsce publish -p ${{ secrets.VSCE_PAT }}
+
+      - name: Publish to Open VSX (Cursor / Antigravity / Windsurf)
+        if: env.OVSX_TOKEN != ''
+        env:
+          OVSX_TOKEN: ${{ secrets.OVSX_TOKEN }}
+        run: npx ovsx publish murf32-*.vsix -p ${{ secrets.OVSX_TOKEN }}
+
+      - name: Upload VSIX to GitHub Release Assets
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v1
+        with:
+          files: "*.vsix"

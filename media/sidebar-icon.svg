@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Neural Synapse Nodes -->
+  <circle cx="5" cy="6" r="2.5" fill="currentColor" fill-opacity="0.2" />
+  <circle cx="19" cy="6" r="2.5" fill="currentColor" fill-opacity="0.2" />
+  <circle cx="12" cy="12" r="3" fill="currentColor" fill-opacity="0.3" />
+  <circle cx="6" cy="19" r="2" fill="currentColor" fill-opacity="0.2" />
+  <circle cx="18" cy="19" r="2" fill="currentColor" fill-opacity="0.2" />
+
+  <!-- Synaptic Wave Connections -->
+  <path d="M7.5 7.5L9.5 10" />
+  <path d="M16.5 7.5L14.5 10" />
+  <path d="M10 14L7.5 17.5" />
+  <path d="M14 14L16.5 17.5" />
+  
+  <!-- Flow pulse -->
+  <path d="M2 12C5 12 7 9 10 12C13 15 15 12 22 12" stroke-opacity="0.6" stroke-dasharray="1.5 2" />
+</svg>
