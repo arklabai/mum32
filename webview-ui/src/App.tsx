@@ -100,6 +100,10 @@ export const App: React.FC = () => {
     vscode.postMessage({ type: 'deleteEntry', payload: { id } });
   };
 
+  const handleUpdateEntry = (id: string, updates: Partial<MemoryEntry>) => {
+    vscode.postMessage({ type: 'updateEntry', payload: { id, updates } });
+  };
+
   const handleTogglePin = (id: string) => {
     vscode.postMessage({ type: 'pinEntry', payload: { id } });
   };
@@ -241,6 +245,7 @@ export const App: React.FC = () => {
             entries={entries}
             onPin={handleTogglePin}
             onDelete={handleDeleteEntry}
+            onUpdate={handleUpdateEntry}
             filterMode={filterMode}
             searchQuery={searchQuery}
           />

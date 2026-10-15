@@ -81,6 +81,18 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
         break;
       }
 
+      case 'updateEntry': {
+        const { id, updates } = message.payload as { id: string; updates: Partial<MemoryEntry> };
+        if (updates?.content) {
+          updates.content = PromptSynthesizer.sanitize(updates.content);
+        }
+        this.ledger.updateEntry(id, updates);
+        this.sendEntries();
+        this.statusBar.refresh();
+        this.autoSync();
+        break;
+      }
+
       case 'copyContext': {
         const entries = this.ledger.getEntries();
         const block = PromptSynthesizer.synthesize(entries);

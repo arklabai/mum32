@@ -80,6 +80,14 @@ export class LedgerManager {
     }
   }
 
+  updateEntry(id: string, updates: Partial<MemoryEntry>): MemoryEntry | null {
+    const entry = this.ledger.entries.find(e => e.id === id);
+    if (!entry) { return null; }
+    Object.assign(entry, updates, { timestamp: Date.now() });
+    this.save();
+    return entry;
+  }
+
   clearStale(olderThanDays = 30): number {
     const cutoff = Date.now() - olderThanDays * 24 * 60 * 60 * 1000;
     const before = this.ledger.entries.length;

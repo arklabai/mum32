@@ -30,6 +30,7 @@ export interface WebviewMessage {
     | 'saveEntry'
     | 'deleteEntry'
     | 'pinEntry'
+    | 'updateEntry'
     | 'copyContext'
     | 'syncAgentsMd'
     | 'clearStale'
