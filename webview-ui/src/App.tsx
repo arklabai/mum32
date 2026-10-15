@@ -149,7 +149,7 @@ export const App: React.FC = () => {
               </span>
             </h1>
             <p className="text-[10px] text-indigo-300/70 hover:text-indigo-200 transition-colors">
-              Beautiful AI Context Ledger & Memory
+              Memory for your AI Harness & Agents
             </p>
           </div>
         </a>

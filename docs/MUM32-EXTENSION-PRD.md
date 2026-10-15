@@ -1,6 +1,6 @@
 # Product Requirements Document (PRD)
 
-## Project: mum32 — Beautiful AI Context Ledger & Prompt Memory Extension
+## Project: mum32 — Memory for your AI Harness & Coding Agents
 **Target Platforms**: VS Code & Antigravity IDE (also compatible with Cursor & Windsurf)  
 **Product Team**: ArkLab AI, Inc.  
 **Author**: ArkLab AI Product & Architecture Group  

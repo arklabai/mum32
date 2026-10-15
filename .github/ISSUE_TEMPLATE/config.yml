@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: mum32 Discussions & Community
+    url: https://github.com/arklabai/mum32/discussions
+    about: Ask questions, share prompt patterns, and discuss agent memory strategies with the community.
+  - name: Official Documentation & Product Portal
+    url: https://www.arklabai.com/mum32
+    about: Explore documentation, configuration guides, and architecture specs.

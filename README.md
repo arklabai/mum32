@@ -1,35 +1,80 @@
-# mum32 — Beautiful AI Context Ledger & Prompt Memory Extension
+# mum32 — Memory for your AI Harness & Coding Agents
 
-Persistent prompt memory engine and context ledger for AI coding agents (**Google Antigravity**, **Cursor**, **Windsurf**, and **VS Code**).
+[![Version](https://img.shields.io/badge/version-0.1.0-6366f1.svg)](package.json)
+[![License: MIT](https://img.shields.io/badge/License-MIT-emerald.svg)](LICENSE)
+[![Tests: Passing](https://img.shields.io/badge/tests-10%20passing-brightgreen.svg)](tests/)
+[![Compatibility](https://img.shields.io/badge/compatible%20with-Antigravity%20%7C%20Cursor%20%7C%20Claude%20%7C%20VS%20Code-blueviolet.svg)](#)
 
-**Official Documentation & Product Page**: [https://www.arklabai.com/mum32](https://www.arklabai.com/mum32)
+> **Persistent prompt memory engine, invariant guard, and context ledger for AI coding harnesses and autonomous agents.**
+> Designed for **Google Antigravity**, **Cursor**, **Claude Code**, **Windsurf**, and **VS Code**.
 
-mum32 captures, categorizes, and remembers:
-- **Design Choices**: Typography, colors, spacing, mobile rules, component tokens.
-- **Agent Invariants**: Prohibited patterns, architecture constraints, and "never do this again" rules.
-- **Prompt Snapshots**: Track prompts across sessions to prevent context drift and agent regressions.
-- **1-Click Synthesis**: Injects accumulated context directly into any agent prompt or auto-syncs into `AGENTS.md`.
+**Official Website & Portal**: [https://www.arklabai.com/mum32](https://www.arklabai.com/mum32)
 
 ---
 
-## Features
+## Why mum32?
 
-### 1. Quick-Capture Form
-Capture decisions right inside your IDE sidebar:
-- **Design Mode**: Set category (`Typography`, `Colors`, `Animation`, `Layout`), target element/page, and CSS/Tailwind tokens.
-- **Rule / Invariant Mode**: Define `Never Do`, `Style Rule`, or `Workflow Requirement` with workspace or global scope.
-- **Prompt Snapshot Mode**: 1-click capture from clipboard with timestamps.
-- **Freeform Notes**: Quick scratchpad for ongoing thoughts.
+As coding agents (Claude, GPT, Cursor, Copilot) generate code across dozens of turns and sessions, two major problems occur:
+1. **Context Drift & Repeated Mistakes**: Agents forget architectural decisions, design tokens, and past corrections, constantly reintroducing regressions.
+2. **Manual Overhead & Risk**: Developers waste time repeatedly copy-pasting system rules, while risking accidental leakage of production secrets and API keys into agent prompts.
 
-### 2. Active Memory Ledger & Search
-- Local-first storage in `.mum32/ledger.json` (git-trackable so your team shares design choices).
-- Instant search across titles, contents, tags, and design tokens.
+**mum32 acts as your AI harness's persistent brain.** It tracks decisions, auto-syncs context to agent files, flags rule violations, and redacts sensitive credentials before they ever reach an LLM.
+
+---
+
+## Key Features
+
+### ⚡ 1. Reactive Multi-Target Auto-Sync
+- Automatically writes pinned design tokens, architectural rules, and negative constraints into your workspace context files:
+  - `AGENTS.md`
+  - `.cursorrules`
+  - `CLAUDE.md`
+- **Non-Destructive**: All synced rules are isolated inside guarded boundaries (`<!-- BEGIN MUM32 CONTEXT --> ... <!-- END MUM32 CONTEXT -->`), never overwriting your existing settings.
+
+### 🛡️ 2. Invariant & Conflict Detector
+- Real-time scanner detects when proposed code or prompts violate recorded negative constraints (*"Never use X"*, *"Avoid Y"*, *"Always enforce Z"*).
+- Triggers instant VS Code notifications and status bar warnings before regressions hit production.
+
+### 🔒 3. Comprehensive Secret & Credential Redaction
+- Built-in zero-leak regex engine automatically sanitizes captured text and prompts:
+  - Anthropic API keys (`sk-ant-...`)
+  - OpenAI API keys (`sk-...`, `sk-proj-...`)
+  - GitHub PATs (`ghp_...`, `github_pat_...`)
+  - AWS Access Keys (`AKIA...`)
+  - Private Keys (`BEGIN RSA/EC PRIVATE KEY`)
+  - Bearer tokens and JWTs
+
+### ⌨️ 4. Global Shortcuts & Interactive QuickPick
+Supercharge your workflow without ever leaving your editor:
+| Shortcut (macOS) | Shortcut (Windows/Linux) | Action |
+| :--- | :--- | :--- |
+| `Cmd+Alt+M` | `Ctrl+Alt+M` | Open mum32 Context Sidebar |
+| `Cmd+Alt+C` | `Ctrl+Alt+C` | Quick-Capture Prompt / Selection from Clipboard |
+| `Cmd+Alt+S` | `Ctrl+Alt+S` | Synthesize Compact Context for Agent Prompt |
+| `Cmd+Alt+P` | `Ctrl+Alt+P` | Auto-Sync Pinned Rules to Context Files |
+| `Cmd+Alt+K` | `Ctrl+Alt+K` | Check Workspace Invariant Conflicts |
+
+Clicking the **Status Bar item** (`$(sparkle) mum32: X memories`) opens a rich interactive QuickPick menu.
+
+### ✏️ 5. Sleek Webview with Inline Memory Editing
+- Built with React 18, Tailwind CSS, and Lucide icons.
+- Instant search across memory titles, tags, and design tokens.
 - Category filters: `All`, `Design`, `Rules`, `Prompts`, and `📌 Pinned`.
+- Direct inline editing with real-time persistence and automatic sync.
 
-### 3. Prompt Synthesizer & Auto-Sync
-- **Copy Context Block**: Formats all pinned rules and design decisions into a clean, token-efficient `<mum32_context>` block ready to paste into any agent chat.
-- **Sync to AGENTS.md**: Automatically updates or appends the active rules block into your project's `AGENTS.md` file.
-- **Clear Stale**: One-click cleanup for unpinned memories older than 30 days.
+---
+
+## Architecture & Storage
+
+mum32 is **local-first and git-friendly**:
+```
+workspace-root/
+├── .mum32/
+│   └── ledger.json         # Git-trackable local memory bank
+├── AGENTS.md               # Auto-updated with <!-- BEGIN MUM32 CONTEXT -->
+├── .cursorrules            # Auto-updated with <!-- BEGIN MUM32 CONTEXT -->
+└── CLAUDE.md               # Auto-updated with <!-- BEGIN MUM32 CONTEXT -->
+```
 
 ---
 
@@ -37,41 +82,42 @@ Capture decisions right inside your IDE sidebar:
 
 | Setting | Default | Description |
 | :--- | :--- | :--- |
-| `mum32.autoSyncOnSave` | `false` | Automatically sync pinned constraints to `AGENTS.md` on every file save. |
-| `mum32.cloudApiKey` | `""` | Optional cloud API key for multi-session vector sync. |
+| `mum32.autoSyncOnSave` | `true` | Automatically sync pinned constraints to context files on memory save/update. |
+| `mum32.syncTargets` | `["AGENTS.md", ".cursorrules", "CLAUDE.md"]` | Target agent context files to synchronize. |
+| `mum32.cloudApiKey` | `""` | Optional cloud API key for team memory sync. |
 | `mum32.gitTrackLedger` | `true` | Include `.mum32/ledger.json` in git tracking. |
 
 ---
 
-## Keyboard Shortcuts & Commands
+## Development & Testing
 
-- `mum32.openSidebar`: Open the mum32 Context Ledger sidebar
-- `mum32.copyContextBlock`: Copy synthesized `<mum32_context>` to clipboard
-- `mum32.syncToAgentsMd`: Sync active rules to `AGENTS.md`
-- `mum32.capturePrompt`: Capture prompt snapshot from clipboard
-- `mum32.clearStale`: Clean up stale unpinned memories
+```bash
+# Clone the repository
+git clone git@github.com:arklabai/mum32.git
+cd mum32
+
+# Install dependencies
+npm install
+cd webview-ui && npm install && cd ..
+
+# Run concurrent dev mode (Vite watcher + Extension compiler)
+npm run dev
+
+# Run unit tests
+npm test
+
+# Build production bundle
+npm run compile
+```
 
 ---
 
-## Publishing & Marketplace Distribution
+## Contributing
 
-mum32 can be published to both the **Visual Studio Marketplace** (for VS Code) and the **Open VSX Registry** (for Antigravity IDE, Cursor, and Windsurf).
-
-For detailed credentials setup, token generation, and CI/CD walkthroughs, see:
-📖 **[Marketplace Publishing Guide (docs/PUBLISHING.md)](docs/PUBLISHING.md)**
-
-### Quick Commands:
-```bash
-# 1. Build and package standalone VSIX
-npm run build:all
-npx @vscode/vsce package --no-git-tag-version
-
-# 2. Publish to VS Code Marketplace
-npx @vscode/vsce publish -p <YOUR_AZURE_PAT>
-
-# 3. Publish to Open VSX (Antigravity & Cursor)
-npx ovsx publish mum32-*.vsix -p <YOUR_OVSX_TOKEN>
-```
+We welcome community contributions! Check out our contributing guidelines and templates:
+- 📖 [Contributing Guide (.github/CONTRIBUTING.md)](.github/CONTRIBUTING.md)
+- 🐛 [Report a Bug](.github/ISSUE_TEMPLATE/bug_report.md)
+- 💡 [Request a Feature](.github/ISSUE_TEMPLATE/feature_request.md)
 
 ---
 
