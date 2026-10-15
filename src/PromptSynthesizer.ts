@@ -104,10 +104,22 @@ export class PromptSynthesizer {
    */
   static sanitize(text: string): string {
     return text
-      .replace(/sk-[A-Za-z0-9]{20,}/g, '[REDACTED_API_KEY]')
-      .replace(/ghp_[A-Za-z0-9]{36}/g, '[REDACTED_GH_TOKEN]')
+      // Anthropic keys (sk-ant-...)
+      .replace(/sk-ant-[a-zA-Z0-9_\-]{15,}/g, '[REDACTED_API_KEY]')
+      // OpenAI keys (legacy sk-..., sk-proj-...)
+      .replace(/sk-[a-zA-Z0-9_\-]{20,}/g, '[REDACTED_API_KEY]')
+      // AWS Access Key IDs
+      .replace(/\b(AKIA|ABIA|ACCA|ASIA)[0-9A-Z]{16}\b/g, '[REDACTED_AWS_KEY]')
+      // GitHub Tokens (classic ghp_... and fine-grained github_pat_...)
+      .replace(/\b(ghp|gho|ghu|ghs|ghr)_[A-Za-z0-9_]{30,}\b/g, '[REDACTED_GH_TOKEN]')
+      .replace(/\bgithub_pat_[A-Za-z0-9_]{20,}\b/g, '[REDACTED_GH_TOKEN]')
+      // Private key blocks (RSA, EC, PGP, etc.)
+      .replace(/-----BEGIN [A-Z ]*PRIVATE KEY-----[\s\S]+?-----END [A-Z ]*PRIVATE KEY-----/g, '[REDACTED_PRIVATE_KEY]')
+      // JWT tokens
       .replace(/eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}/g, '[REDACTED_JWT]')
+      // Password strings
       .replace(/password\s*[:=]\s*\S+/gi, 'password: [REDACTED]')
-      .replace(/Bearer\s+[A-Za-z0-9\-._~+/]+=*/g, 'Bearer [REDACTED]');
+      // Bearer tokens
+      .replace(/Bearer\s+[A-Za-z0-9\-._~+/]+=*/gi, 'Bearer [REDACTED]');
   }
 }
