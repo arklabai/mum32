@@ -70,10 +70,21 @@
     "configuration": {
       "title": "mum32",
       "properties": {
+        "mum32.autoSync": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically keep AGENTS.md, .cursorrules, and CLAUDE.md in sync when memories change."
+        },
+        "mum32.syncTargets": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": ["AGENTS.md", ".cursorrules", "CLAUDE.md"],
+          "description": "Target agent context files to synchronize with pinned rules."
+        },
         "mum32.autoSyncOnSave": {
           "type": "boolean",
           "default": false,
-          "description": "Automatically sync pinned constraints to AGENTS.md on every save."
+          "description": "Automatically sync pinned constraints to agent files on every editor save."
         },
         "mum32.cloudApiKey": {
           "type": "string",

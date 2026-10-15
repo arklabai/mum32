@@ -4,6 +4,7 @@ import * as fs from 'fs';
 import { LedgerManager } from './LedgerManager';
 import { PromptSynthesizer } from './PromptSynthesizer';
 import { StatusBarController } from './StatusBarController';
+import { SyncEngine } from './SyncEngine';
 import { MemoryEntry, WebviewMessage } from './types';
 
 /**
@@ -13,13 +14,16 @@ import { MemoryEntry, WebviewMessage } from './types';
 export class SidebarProvider implements vscode.WebviewViewProvider {
   public static readonly viewType = 'mum32.sidebarView';
   private _view?: vscode.WebviewView;
+  private syncEngine: SyncEngine;
 
   constructor(
     private readonly extensionUri: vscode.Uri,
     private readonly ledger: LedgerManager,
     private readonly statusBar: StatusBarController,
     private readonly workspaceRoot: string
-  ) {}
+  ) {
+    this.syncEngine = new SyncEngine(workspaceRoot);
+  }
 
   resolveWebviewView(
     webviewView: vscode.WebviewView,
@@ -55,6 +59,7 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
         this.ledger.addEntry(sanitized);
         this.sendEntries();
         this.statusBar.refresh();
+        this.autoSync();
         break;
       }
 
@@ -63,6 +68,7 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
         this.ledger.deleteEntry(id);
         this.sendEntries();
         this.statusBar.refresh();
+        this.autoSync();
         break;
       }
 
@@ -71,6 +77,7 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
         this.ledger.togglePin(id);
         this.sendEntries();
         this.statusBar.refresh();
+        this.autoSync();
         break;
       }
 
@@ -87,7 +94,7 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
       }
 
       case 'syncAgentsMd': {
-        this.syncToAgentsMd();
+        this.autoSync(true);
         break;
       }
 
@@ -96,6 +103,7 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
         vscode.window.showInformationMessage(`mum32: Cleared ${removed} stale memories.`);
         this.sendEntries();
         this.statusBar.refresh();
+        this.autoSync();
         break;
       }
 
@@ -121,29 +129,29 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
     this._view?.webview.postMessage({ type: 'entriesUpdated', payload: { entries } });
   }
 
-  syncToAgentsMd(): void {
+  public autoSync(notify = false): string[] {
+    const config = vscode.workspace.getConfiguration('mum32');
+    const enabled = config.get<boolean>('autoSync', true);
+    if (!enabled) { return []; }
+
+    const targets = config.get<string[]>('syncTargets', ['AGENTS.md', '.cursorrules', 'CLAUDE.md']);
     const entries = this.ledger.getEntries();
-    const block = PromptSynthesizer.forAgentsMd(entries);
-    if (!block) {
-      vscode.window.showInformationMessage('mum32: No pinned rules to sync. Pin some entries first.');
-      return;
+    const updated = this.syncEngine.sync(entries, targets);
+
+    if (updated.length > 0) {
+      this.statusBar.showSynced();
+      if (notify) {
+        vscode.window.showInformationMessage(`mum32: Synced active rules to ${updated.join(', ')} ✓`);
+      }
+      this._view?.webview.postMessage({ type: 'synced', payload: { files: updated } });
+    } else if (notify) {
+      vscode.window.showInformationMessage('mum32: No pinned rules to sync.');
     }
+    return updated;
+  }
 
-    const agentsMdPath = path.join(this.workspaceRoot, 'AGENTS.md');
-    const marker = '<!-- mum32: auto-generated context block — do not edit manually -->';
-
-    let existing = fs.existsSync(agentsMdPath) ? fs.readFileSync(agentsMdPath, 'utf-8') : '';
-
-    // Replace existing mum32 block or append
-    if (existing.includes(marker)) {
-      existing = existing.replace(/<!-- mum32:.*?<!-- \/mum32 -->/s, block);
-    } else {
-      existing = existing.trimEnd() + '\n\n' + block + '\n';
-    }
-
-    fs.writeFileSync(agentsMdPath, existing, 'utf-8');
-    this.statusBar.showSynced();
-    vscode.window.showInformationMessage('mum32: Synced active rules to AGENTS.md ✓');
+  syncToAgentsMd(): void {
+    this.autoSync(true);
   }
 
   private getHtml(webview: vscode.Webview): string {

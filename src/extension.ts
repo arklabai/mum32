@@ -105,7 +105,7 @@ export function activate(context: vscode.ExtensionContext): void {
     vscode.workspace.onDidSaveTextDocument(() => {
       const config = vscode.workspace.getConfiguration('mum32');
       if (config.get<boolean>('autoSyncOnSave')) {
-        sidebarProvider.syncToAgentsMd();
+        sidebarProvider.autoSync();
       }
     })
   );
