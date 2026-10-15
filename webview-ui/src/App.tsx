@@ -157,7 +157,7 @@ export const App: React.FC = () => {
             <h1 className="text-xs font-semibold tracking-wide text-white flex items-center gap-1.5 leading-none">
               mum32
               <span className="text-[9px] font-mono font-medium px-1.5 py-0.5 rounded bg-indigo-500/15 text-indigo-300 border border-indigo-500/30">
-                v0.1.0
+                v0.1.1
               </span>
             </h1>
             <p className="text-[10px] text-indigo-200/60 group-hover:text-indigo-200/90 transition-colors mt-0.5 flex items-center gap-1">

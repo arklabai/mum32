@@ -2,7 +2,7 @@
   "name": "mum32",
   "displayName": "mum32 — Memory for your AI Harness & Coding Agents",
   "description": "Persistent memory engine and context ledger for your AI harness and coding agents (Claude, Cursor, Antigravity, Copilot)",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "publisher": "arklabai",
   "homepage": "https://www.arklabai.com/mum32",
   "license": "MIT",
