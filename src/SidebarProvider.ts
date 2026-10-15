@@ -153,7 +153,7 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
     if (updated.length > 0) {
       this.statusBar.showSynced();
       if (notify) {
-        vscode.window.showInformationMessage(`mum32: Synced active rules to ${updated.join(', ')} ✓`);
+        vscode.window.showInformationMessage(`mum32: Synced active rules to ${updated.join(', ')}`);
       }
       this._view?.webview.postMessage({ type: 'synced', payload: { files: updated } });
     } else if (notify) {

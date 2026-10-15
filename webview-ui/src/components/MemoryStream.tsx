@@ -1,12 +1,31 @@
 import React, { useState } from 'react';
 import { MemoryEntry, MemoryMode } from '../types';
-import { Pin, Trash2, Clock, Code2, Layers, Edit3, Check, X } from 'lucide-react';
+import {
+  Pin,
+  Trash2,
+  Clock,
+  Code2,
+  Layers,
+  Edit3,
+  Check,
+  X,
+  Copy,
+  Brain,
+  Palette,
+  Shield,
+  FileText,
+  StickyNote,
+  ChevronDown,
+  Globe,
+  FolderGit2,
+  LucideIcon,
+} from 'lucide-react';
 
-const MODE_LABELS: Record<MemoryMode, string> = {
-  design: 'Design',
-  constraint: 'Rule',
-  prompt: 'Prompt',
-  note: 'Note',
+const MODE_CONFIG: Record<MemoryMode, { label: string; icon: LucideIcon }> = {
+  design: { label: 'Design', icon: Palette },
+  constraint: { label: 'Rule', icon: Shield },
+  prompt: { label: 'Prompt', icon: FileText },
+  note: { label: 'Note', icon: StickyNote },
 };
 
 const MODE_COLORS: Record<MemoryMode, string> = {
@@ -45,6 +64,7 @@ export const MemoryStream: React.FC<Props> = ({
 }) => {
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
   const [editTitle, setEditTitle] = useState('');
   const [editContent, setEditContent] = useState('');
   const [editTokens, setEditTokens] = useState('');
@@ -75,6 +95,13 @@ export const MemoryStream: React.FC<Props> = ({
     setEditingId(null);
   };
 
+  const handleCopySingle = (id: string, content: string) => {
+    navigator.clipboard.writeText(content).then(() => {
+      setCopiedId(id);
+      setTimeout(() => setCopiedId(null), 1800);
+    });
+  };
+
   const filtered = entries.filter(e => {
     // Mode filter
     if (filterMode === 'pinned' && !e.pinned) { return false; }
@@ -98,12 +125,14 @@ export const MemoryStream: React.FC<Props> = ({
   if (filtered.length === 0) {
     return (
       <div className="px-3 py-10 text-center">
-        <div className="text-3xl mb-2 opacity-80">🧠</div>
+        <div className="w-12 h-12 mx-auto mb-3 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 shadow-sm">
+          <Brain size={22} className="stroke-[1.75]" />
+        </div>
         <p className="text-white/40 text-xs font-medium">
           {searchQuery
             ? `No memories matching "${searchQuery}"`
             : filterMode === 'all'
-            ? 'No memories saved yet. Capture your first rule above!'
+            ? 'No memories recorded yet. Capture your first decision above.'
             : `No ${filterMode} entries recorded.`}
         </p>
       </div>
@@ -114,12 +143,15 @@ export const MemoryStream: React.FC<Props> = ({
     <div className="space-y-2 px-3 pb-4">
       {filtered.map(entry => {
         const isEditing = editingId === entry.id;
+        const isExpanded = expandedId === entry.id;
+        const modeInfo = MODE_CONFIG[entry.mode] || { label: entry.mode, icon: StickyNote };
+        const ModeIcon = modeInfo.icon;
 
         return (
           <div
             key={entry.id}
-            className={`glass rounded-lg p-2.5 transition-all hover:border-white/20 animate-fade-in ${
-              entry.pinned ? 'border-indigo-500/40 bg-indigo-500/10' : ''
+            className={`glass rounded-lg p-2.5 transition-all animate-fade-in ${
+              entry.pinned ? 'card-pinned' : ''
             }`}
           >
             {isEditing ? (
@@ -131,7 +163,7 @@ export const MemoryStream: React.FC<Props> = ({
                     <button
                       type="button"
                       onClick={() => saveEdit(entry.id)}
-                      className="px-2 py-0.5 rounded bg-indigo-600 hover:bg-indigo-500 text-white text-[10px] flex items-center gap-1 font-medium transition-colors"
+                      className="px-2 py-0.5 rounded bg-indigo-600 hover:bg-indigo-500 text-white text-[10px] flex items-center gap-1 font-medium transition-colors shadow-sm"
                     >
                       <Check size={11} />
                       Save
@@ -173,37 +205,73 @@ export const MemoryStream: React.FC<Props> = ({
               /* Normal View Mode */
               <div
                 className="cursor-pointer"
-                onClick={() => setExpandedId(expandedId === entry.id ? null : entry.id)}
+                onClick={() => setExpandedId(isExpanded ? null : entry.id)}
               >
                 {/* Header row */}
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-1.5 flex-wrap mb-1">
-                      {entry.pinned && <span className="text-[11px]" title="Pinned">📌</span>}
-                      <span className={`tag-pill ${MODE_COLORS[entry.mode]}`}>
-                        {MODE_LABELS[entry.mode]}
-                      </span>
-                      {entry.category && (
-                        <span className="tag-pill bg-white/5 text-white/50">{entry.category}</span>
-                      )}
-                      {entry.targetElement && (
-                        <span className="tag-pill bg-purple-500/20 text-purple-300 flex items-center gap-1">
-                          <Layers size={9} />
-                          {entry.targetElement}
+                      {entry.pinned && (
+                        <span className="flex items-center text-amber-400 fill-amber-400/20" title="Pinned to context">
+                          <Pin size={11} className="fill-current" />
                         </span>
                       )}
+
+                      {/* Mode Badge with React Icon */}
+                      <span className={`tag-pill ${MODE_COLORS[entry.mode]}`}>
+                        <ModeIcon size={9} />
+                        <span>{modeInfo.label}</span>
+                      </span>
+
+                      {entry.category && (
+                        <span className="tag-pill bg-white/5 text-white/60 border border-white/5">
+                          {entry.category}
+                        </span>
+                      )}
+
+                      {entry.targetElement && (
+                        <span className="tag-pill bg-purple-500/15 text-purple-300 border border-purple-500/20">
+                          <Layers size={9} />
+                          <span>{entry.targetElement}</span>
+                        </span>
+                      )}
+
                       {entry.constraintType && (
-                        <span className="tag-pill bg-red-500/15 text-red-300">
+                        <span className="tag-pill bg-red-500/15 text-red-300 border border-red-500/20">
                           {entry.constraintType}
                         </span>
                       )}
-                      <span className="tag-pill bg-white/5 text-white/40">{entry.scope}</span>
+
+                      <span className="tag-pill bg-white/5 text-white/40 border border-white/5">
+                        {entry.scope === 'global' ? (
+                          <Globe size={9} className="text-white/40" />
+                        ) : (
+                          <FolderGit2 size={9} className="text-white/40" />
+                        )}
+                        <span>{entry.scope}</span>
+                      </span>
                     </div>
-                    <p className="text-[12px] font-medium text-white/90 truncate leading-snug">{entry.title}</p>
+
+                    <p className="text-[12px] font-medium text-white/95 truncate leading-snug">
+                      {entry.title}
+                    </p>
                   </div>
 
-                  {/* Actions */}
+                  {/* Actions Toolbar */}
                   <div className="flex items-center gap-0.5 flex-shrink-0" onClick={e => e.stopPropagation()}>
+                    <button
+                      type="button"
+                      onClick={() => handleCopySingle(entry.id, entry.content)}
+                      title="Copy content"
+                      className="p-1 rounded hover:bg-white/10 text-white/40 hover:text-white/90 transition-colors"
+                    >
+                      {copiedId === entry.id ? (
+                        <Check size={11} className="text-emerald-400" />
+                      ) : (
+                        <Copy size={11} />
+                      )}
+                    </button>
+
                     <button
                       type="button"
                       onClick={() => startEdit(entry)}
@@ -212,16 +280,18 @@ export const MemoryStream: React.FC<Props> = ({
                     >
                       <Edit3 size={11} />
                     </button>
+
                     <button
                       type="button"
                       onClick={() => onPin(entry.id)}
-                      title={entry.pinned ? 'Unpin' : 'Pin to context'}
+                      title={entry.pinned ? 'Unpin from context' : 'Pin to context'}
                       className={`p-1 rounded hover:bg-white/10 transition-colors ${
-                        entry.pinned ? 'text-indigo-400' : 'text-white/30 hover:text-white/80'
+                        entry.pinned ? 'text-amber-400' : 'text-white/30 hover:text-white/80'
                       }`}
                     >
-                      <Pin size={11} />
+                      <Pin size={11} className={entry.pinned ? 'fill-amber-400/20' : ''} />
                     </button>
+
                     <button
                       type="button"
                       onClick={() => onDelete(entry.id)}
@@ -230,20 +300,29 @@ export const MemoryStream: React.FC<Props> = ({
                     >
                       <Trash2 size={11} />
                     </button>
+
+                    <ChevronDown
+                      size={12}
+                      className={`text-white/30 transition-transform duration-200 ml-0.5 ${
+                        isExpanded ? 'rotate-180' : ''
+                      }`}
+                    />
                   </div>
                 </div>
 
                 {/* Collapsed Preview snippet if not expanded */}
-                {expandedId !== entry.id && (
+                {!isExpanded && (
                   <p className="text-[11px] text-white/50 truncate mt-1">
                     {entry.content}
                   </p>
                 )}
 
                 {/* Expanded full details */}
-                {expandedId === entry.id && (
+                {isExpanded && (
                   <div className="mt-2.5 pt-2 border-t border-white/10 animate-fade-in space-y-2">
-                    <p className="text-[11px] text-white/75 leading-relaxed whitespace-pre-wrap">{entry.content}</p>
+                    <p className="text-[11px] text-white/80 leading-relaxed whitespace-pre-wrap font-sans">
+                      {entry.content}
+                    </p>
 
                     {/* Tokens badge list */}
                     {entry.tokens && entry.tokens.length > 0 && (
@@ -254,7 +333,10 @@ export const MemoryStream: React.FC<Props> = ({
                         </div>
                         <div className="flex flex-wrap gap-1">
                           {entry.tokens.map((tok, idx) => (
-                            <span key={idx} className="font-mono text-[10px] bg-indigo-500/15 text-indigo-200 px-1.5 py-0.5 rounded border border-indigo-500/20">
+                            <span
+                              key={idx}
+                              className="font-mono text-[10px] bg-indigo-500/15 text-indigo-200 px-1.5 py-0.5 rounded border border-indigo-500/20"
+                            >
                               {tok}
                             </span>
                           ))}
@@ -266,7 +348,9 @@ export const MemoryStream: React.FC<Props> = ({
                     {entry.tags && entry.tags.length > 0 && (
                       <div className="flex flex-wrap gap-1 mt-1.5">
                         {entry.tags.map(tag => (
-                          <span key={tag} className="tag-pill bg-white/5 text-white/40">{tag}</span>
+                          <span key={tag} className="tag-pill bg-white/5 text-white/40 border border-white/5">
+                            {tag}
+                          </span>
                         ))}
                       </div>
                     )}

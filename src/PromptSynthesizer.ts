@@ -29,7 +29,7 @@ export class PromptSynthesizer {
     if (designs.length > 0) {
       lines.push('## Design Decisions');
       for (const e of designs) {
-        const pin = e.pinned ? '📌 ' : '';
+        const pin = e.pinned ? '[PINNED] ' : '';
         const cat = e.category ? `[${e.category}] ` : '';
         const target = e.targetElement ? ` (${e.targetElement})` : '';
         const tokens = e.tokens && e.tokens.length > 0 ? ` [Tokens: ${e.tokens.join(', ')}]` : '';
@@ -40,7 +40,7 @@ export class PromptSynthesizer {
     if (constraints.length > 0) {
       lines.push('## Agent Rules & Invariants');
       for (const e of constraints) {
-        const pin = e.pinned ? '📌 ' : '';
+        const pin = e.pinned ? '[PINNED] ' : '';
         const typePrefix = e.constraintType ? `[${e.constraintType.toUpperCase()}] ` : '';
         const scope = e.scope !== 'global' ? ` (scope: ${e.scope})` : '';
         lines.push(`- ${pin}${typePrefix}${e.title}: ${e.content}${scope}`);

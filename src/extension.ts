@@ -78,7 +78,7 @@ export function activate(context: vscode.ExtensionContext): void {
       const conflicts = ConflictDetector.check(sanitized, ledger.getEntries());
       if (conflicts.length > 0) {
         vscode.window.showWarningMessage(
-          `⚠️ mum32 Conflict: Captured prompt contradicts rule "${conflicts[0].ruleTitle}" (term: "${conflicts[0].matchedTerm}").`
+          `mum32 Conflict: Captured prompt contradicts rule "${conflicts[0].ruleTitle}" (term: "${conflicts[0].matchedTerm}").`
         );
       }
 
@@ -97,7 +97,7 @@ export function activate(context: vscode.ExtensionContext): void {
         scope: 'workspace',
       });
       statusBar.refresh();
-      vscode.window.showInformationMessage('mum32: Prompt captured ✓');
+      vscode.window.showInformationMessage('mum32: Prompt captured successfully.');
     })
   );
 
@@ -111,7 +111,7 @@ export function activate(context: vscode.ExtensionContext): void {
       const text = editor.document.getText();
       const conflicts = ConflictDetector.check(text, ledger.getEntries());
       if (conflicts.length === 0) {
-        vscode.window.showInformationMessage('mum32: No rule conflicts detected in active file ✓');
+        vscode.window.showInformationMessage('mum32: No rule conflicts detected in active file.');
       } else {
         const summary = conflicts.map(c => `• ${c.ruleTitle} (term: "${c.matchedTerm}")`).join('; ');
         vscode.window.showWarningMessage(`mum32: Found ${conflicts.length} invariant violation(s): ${summary}`);
@@ -146,7 +146,7 @@ export function activate(context: vscode.ExtensionContext): void {
 
   context.subscriptions.push(statusBar);
 
-  console.log('mum32: Extension activated ✓');
+  console.log('mum32: Extension activated.');
 }
 
 export function deactivate(): void {}
