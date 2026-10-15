@@ -33,6 +33,12 @@ export function activate(context: vscode.ExtensionContext): void {
   // --- Commands ---
 
   context.subscriptions.push(
+    vscode.commands.registerCommand('mum32.statusBarMenu', () => {
+      statusBar.showMenu();
+    })
+  );
+
+  context.subscriptions.push(
     vscode.commands.registerCommand('mum32.openSidebar', () => {
       vscode.commands.executeCommand('mum32.sidebarView.focus');
     })

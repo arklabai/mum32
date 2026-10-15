@@ -70,6 +70,38 @@
         "command": "mum32.checkConflicts",
         "title": "mum32: Scan Active File for Invariant Conflicts",
         "icon": "$(shield)"
+      },
+      {
+        "command": "mum32.statusBarMenu",
+        "title": "mum32: Open Quick Actions Menu",
+        "icon": "$(sparkle)"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "mum32.openSidebar",
+        "key": "ctrl+alt+m",
+        "mac": "cmd+alt+m"
+      },
+      {
+        "command": "mum32.copyContextBlock",
+        "key": "ctrl+alt+c",
+        "mac": "cmd+alt+c"
+      },
+      {
+        "command": "mum32.syncToAgentsMd",
+        "key": "ctrl+alt+s",
+        "mac": "cmd+alt+s"
+      },
+      {
+        "command": "mum32.capturePrompt",
+        "key": "ctrl+alt+p",
+        "mac": "cmd+alt+p"
+      },
+      {
+        "command": "mum32.checkConflicts",
+        "key": "ctrl+alt+k",
+        "mac": "cmd+alt+k"
       }
     ],
     "configuration": {
