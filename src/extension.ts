@@ -3,6 +3,7 @@ import { LedgerManager } from './LedgerManager';
 import { SidebarProvider } from './SidebarProvider';
 import { StatusBarController } from './StatusBarController';
 import { PromptSynthesizer } from './PromptSynthesizer';
+import { ConflictDetector } from './ConflictDetector';
 
 export function activate(context: vscode.ExtensionContext): void {
   const workspaceRoot = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
@@ -66,6 +67,15 @@ export function activate(context: vscode.ExtensionContext): void {
         return;
       }
       const sanitized = PromptSynthesizer.sanitize(text);
+
+      // Check for rule conflicts before saving
+      const conflicts = ConflictDetector.check(sanitized, ledger.getEntries());
+      if (conflicts.length > 0) {
+        vscode.window.showWarningMessage(
+          `⚠️ mum32 Conflict: Captured prompt contradicts rule "${conflicts[0].ruleTitle}" (term: "${conflicts[0].matchedTerm}").`
+        );
+      }
+
       const title = await vscode.window.showInputBox({
         prompt: 'Give this prompt snapshot a name',
         placeHolder: 'e.g. "Initial layout setup for homepage"',
@@ -82,6 +92,24 @@ export function activate(context: vscode.ExtensionContext): void {
       });
       statusBar.refresh();
       vscode.window.showInformationMessage('mum32: Prompt captured ✓');
+    })
+  );
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand('mum32.checkConflicts', () => {
+      const editor = vscode.window.activeTextEditor;
+      if (!editor) {
+        vscode.window.showInformationMessage('mum32: No active editor file to scan for conflicts.');
+        return;
+      }
+      const text = editor.document.getText();
+      const conflicts = ConflictDetector.check(text, ledger.getEntries());
+      if (conflicts.length === 0) {
+        vscode.window.showInformationMessage('mum32: No rule conflicts detected in active file ✓');
+      } else {
+        const summary = conflicts.map(c => `• ${c.ruleTitle} (term: "${c.matchedTerm}")`).join('; ');
+        vscode.window.showWarningMessage(`mum32: Found ${conflicts.length} invariant violation(s): ${summary}`);
+      }
     })
   );
 
