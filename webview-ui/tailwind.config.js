@@ -7,7 +7,7 @@ export default {
         sans: ['Inter', 'system-ui', 'sans-serif'],
       },
       colors: {
-        murf: {
+        mum: {
           50: '#f0f4ff',
           100: '#dde7ff',
           400: '#818cf8',

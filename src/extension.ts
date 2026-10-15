@@ -8,7 +8,7 @@ export function activate(context: vscode.ExtensionContext): void {
   const workspaceRoot = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
 
   if (!workspaceRoot) {
-    vscode.window.showWarningMessage('murf32: Please open a workspace folder to use murf32.');
+    vscode.window.showWarningMessage('mum32: Please open a workspace folder to use mum32.');
     return;
   }
 
@@ -32,37 +32,37 @@ export function activate(context: vscode.ExtensionContext): void {
   // --- Commands ---
 
   context.subscriptions.push(
-    vscode.commands.registerCommand('murf32.openSidebar', () => {
-      vscode.commands.executeCommand('murf32.sidebarView.focus');
+    vscode.commands.registerCommand('mum32.openSidebar', () => {
+      vscode.commands.executeCommand('mum32.sidebarView.focus');
     })
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand('murf32.copyContextBlock', async () => {
+    vscode.commands.registerCommand('mum32.copyContextBlock', async () => {
       const entries = ledger.getEntries();
       if (entries.length === 0) {
-        vscode.window.showWarningMessage('murf32: No memories saved yet. Add some in the sidebar!');
+        vscode.window.showWarningMessage('mum32: No memories saved yet. Add some in the sidebar!');
         return;
       }
       const block = PromptSynthesizer.synthesize(entries);
       await vscode.env.clipboard.writeText(block);
       vscode.window.showInformationMessage(
-        `murf32: Context block copied to clipboard! (~${PromptSynthesizer.estimateTokens(block)} tokens)`
+        `mum32: Context block copied to clipboard! (~${PromptSynthesizer.estimateTokens(block)} tokens)`
       );
     })
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand('murf32.syncToAgentsMd', () => {
+    vscode.commands.registerCommand('mum32.syncToAgentsMd', () => {
       sidebarProvider.syncToAgentsMd();
     })
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand('murf32.capturePrompt', async () => {
+    vscode.commands.registerCommand('mum32.capturePrompt', async () => {
       const text = await vscode.env.clipboard.readText();
       if (!text.trim()) {
-        vscode.window.showWarningMessage('murf32: Clipboard is empty. Copy a prompt first.');
+        vscode.window.showWarningMessage('mum32: Clipboard is empty. Copy a prompt first.');
         return;
       }
       const sanitized = PromptSynthesizer.sanitize(text);
@@ -81,21 +81,21 @@ export function activate(context: vscode.ExtensionContext): void {
         scope: 'workspace',
       });
       statusBar.refresh();
-      vscode.window.showInformationMessage('murf32: Prompt captured ✓');
+      vscode.window.showInformationMessage('mum32: Prompt captured ✓');
     })
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand('murf32.clearStale', async () => {
+    vscode.commands.registerCommand('mum32.clearStale', async () => {
       const answer = await vscode.window.showWarningMessage(
-        'murf32: Remove all unpinned memories older than 30 days?',
+        'mum32: Remove all unpinned memories older than 30 days?',
         { modal: true },
         'Yes, Clear'
       );
       if (answer === 'Yes, Clear') {
         const removed = ledger.clearStale(30);
         statusBar.refresh();
-        vscode.window.showInformationMessage(`murf32: Removed ${removed} stale memories.`);
+        vscode.window.showInformationMessage(`mum32: Removed ${removed} stale memories.`);
       }
     })
   );
@@ -103,7 +103,7 @@ export function activate(context: vscode.ExtensionContext): void {
   // Auto-sync on save (if configured)
   context.subscriptions.push(
     vscode.workspace.onDidSaveTextDocument(() => {
-      const config = vscode.workspace.getConfiguration('murf32');
+      const config = vscode.workspace.getConfiguration('mum32');
       if (config.get<boolean>('autoSyncOnSave')) {
         sidebarProvider.syncToAgentsMd();
       }
@@ -112,7 +112,7 @@ export function activate(context: vscode.ExtensionContext): void {
 
   context.subscriptions.push(statusBar);
 
-  console.log('murf32: Extension activated ✓');
+  console.log('mum32: Extension activated ✓');
 }
 
 export function deactivate(): void {}

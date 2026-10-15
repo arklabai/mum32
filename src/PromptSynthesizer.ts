@@ -2,7 +2,7 @@ import { MemoryEntry } from './types';
 
 /**
  * Formats pinned/relevant memory entries into a compact, token-efficient
- * <murf32_context> block ready to be injected into any agent prompt.
+ * <mum32_context> block ready to be injected into any agent prompt.
  */
 export class PromptSynthesizer {
   /**
@@ -11,7 +11,7 @@ export class PromptSynthesizer {
    */
   static synthesize(entries: MemoryEntry[]): string {
     if (entries.length === 0) {
-      return '<murf32_context>\n  (No active constraints recorded.)\n</murf32_context>';
+      return '<mum32_context>\n  (No active constraints recorded.)\n</mum32_context>';
     }
 
     const pinned = entries.filter(e => e.pinned);
@@ -62,7 +62,7 @@ export class PromptSynthesizer {
       }
     }
 
-    return `<murf32_context>\n${lines.join('\n')}\n</murf32_context>`;
+    return `<mum32_context>\n${lines.join('\n')}\n</mum32_context>`;
   }
 
   /**
@@ -76,8 +76,8 @@ export class PromptSynthesizer {
     }
 
     const lines = [
-      '<!-- murf32: auto-generated context block — do not edit manually -->',
-      '## murf32 Active Constraints',
+      '<!-- mum32: auto-generated context block — do not edit manually -->',
+      '## mum32 Active Constraints',
       '',
     ];
 
@@ -87,7 +87,7 @@ export class PromptSynthesizer {
       lines.push(`- **${typePrefix}${e.title}**: ${e.content}${tokens}`);
     }
 
-    lines.push('<!-- /murf32 -->');
+    lines.push('<!-- /mum32 -->');
     return lines.join('\n');
   }
 

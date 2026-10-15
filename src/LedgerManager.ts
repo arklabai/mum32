@@ -3,12 +3,12 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { Ledger, MemoryEntry, MemoryMode } from './types';
 
-const LEDGER_DIR = '.murf32';
+const LEDGER_DIR = '.mum32';
 const LEDGER_FILE = 'ledger.json';
 const CONFIG_FILE = 'config.json';
 
 /**
- * Handles all read/write operations to .murf32/ledger.json
+ * Handles all read/write operations to .mum32/ledger.json
  * Local-first: all data lives in the workspace directory.
  */
 export class LedgerManager {
@@ -42,7 +42,7 @@ export class LedgerManager {
       const raw = fs.readFileSync(this.ledgerPath, 'utf-8');
       return JSON.parse(raw) as Ledger;
     } catch {
-      vscode.window.showErrorMessage('murf32: Failed to parse ledger.json. Starting fresh.');
+      vscode.window.showErrorMessage('mum32: Failed to parse ledger.json. Starting fresh.');
       return { version: '1.0.0', workspaceId: path.basename(this.workspaceRoot), entries: [] };
     }
   }

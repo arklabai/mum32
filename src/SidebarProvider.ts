@@ -7,11 +7,11 @@ import { StatusBarController } from './StatusBarController';
 import { MemoryEntry, WebviewMessage } from './types';
 
 /**
- * Provides the murf32 sidebar webview panel.
+ * Provides the mum32 sidebar webview panel.
  * Bridges messages between the React UI and the extension host.
  */
 export class SidebarProvider implements vscode.WebviewViewProvider {
-  public static readonly viewType = 'murf32.sidebarView';
+  public static readonly viewType = 'mum32.sidebarView';
   private _view?: vscode.WebviewView;
 
   constructor(
@@ -79,7 +79,7 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
         const block = PromptSynthesizer.synthesize(entries);
         vscode.env.clipboard.writeText(block).then(() => {
           vscode.window.showInformationMessage(
-            `murf32: Context block copied! (~${PromptSynthesizer.estimateTokens(block)} tokens)`
+            `mum32: Context block copied! (~${PromptSynthesizer.estimateTokens(block)} tokens)`
           );
           this._view?.webview.postMessage({ type: 'copied', payload: { block } });
         });
@@ -93,7 +93,7 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
 
       case 'clearStale': {
         const removed = this.ledger.clearStale();
-        vscode.window.showInformationMessage(`murf32: Cleared ${removed} stale memories.`);
+        vscode.window.showInformationMessage(`mum32: Cleared ${removed} stale memories.`);
         this.sendEntries();
         this.statusBar.refresh();
         break;
@@ -125,25 +125,25 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
     const entries = this.ledger.getEntries();
     const block = PromptSynthesizer.forAgentsMd(entries);
     if (!block) {
-      vscode.window.showInformationMessage('murf32: No pinned rules to sync. Pin some entries first.');
+      vscode.window.showInformationMessage('mum32: No pinned rules to sync. Pin some entries first.');
       return;
     }
 
     const agentsMdPath = path.join(this.workspaceRoot, 'AGENTS.md');
-    const marker = '<!-- murf32: auto-generated context block — do not edit manually -->';
+    const marker = '<!-- mum32: auto-generated context block — do not edit manually -->';
 
     let existing = fs.existsSync(agentsMdPath) ? fs.readFileSync(agentsMdPath, 'utf-8') : '';
 
-    // Replace existing murf32 block or append
+    // Replace existing mum32 block or append
     if (existing.includes(marker)) {
-      existing = existing.replace(/<!-- murf32:.*?<!-- \/murf32 -->/s, block);
+      existing = existing.replace(/<!-- mum32:.*?<!-- \/mum32 -->/s, block);
     } else {
       existing = existing.trimEnd() + '\n\n' + block + '\n';
     }
 
     fs.writeFileSync(agentsMdPath, existing, 'utf-8');
     this.statusBar.showSynced();
-    vscode.window.showInformationMessage('murf32: Synced active rules to AGENTS.md ✓');
+    vscode.window.showInformationMessage('mum32: Synced active rules to AGENTS.md ✓');
   }
 
   private getHtml(webview: vscode.Webview): string {
@@ -159,7 +159,7 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource} 'unsafe-inline'; script-src 'nonce-${nonce}'; font-src ${webview.cspSource} data:; img-src ${webview.cspSource} data:;" />
   <link rel="stylesheet" href="${styleUri}" />
-  <title>murf32</title>
+  <title>mum32</title>
 </head>
 <body>
   <div id="root"></div>

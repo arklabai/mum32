@@ -1,6 +1,6 @@
-# murf32 — Marketplace Publishing & Distribution Guide
+# mum32 — Marketplace Publishing & Distribution Guide
 
-This guide details how to publish and distribute the **murf32** extension across all supported IDEs, including **Visual Studio Code**, **Antigravity IDE**, **Cursor**, and **Windsurf**.
+This guide details how to publish and distribute the **mum32** extension across all supported IDEs, including **Visual Studio Code**, **Antigravity IDE**, **Cursor**, and **Windsurf**.
 
 ---
 
@@ -19,7 +19,7 @@ This guide details how to publish and distribute the **murf32** extension across
 The repository includes a ready-to-use CI/CD workflow at [`.github/workflows/publish-extension.yml`](../.github/workflows/publish-extension.yml).
 
 ### Setup:
-1. Go to your GitHub repository: [github.com/arklabai/murf32](https://github.com/arklabai/murf32)
+1. Go to your GitHub repository: [github.com/arklabai/mum32](https://github.com/arklabai/mum32)
 2. Go to **Settings** > **Secrets and variables** > **Actions** > **New repository secret**.
 3. Add the following secrets:
    - `VSCE_PAT`: Your Azure DevOps Personal Access Token.
@@ -95,7 +95,7 @@ Because **Antigravity IDE**, **Cursor**, and **Windsurf** do not pull from Micro
    npx @vscode/vsce package --no-git-tag-version
 
    # 2. Publish to Open VSX:
-   npx ovsx publish murf32-*.vsix -p <YOUR_OVSX_TOKEN>
+   npx ovsx publish mum32-*.vsix -p <YOUR_OVSX_TOKEN>
    ```
 
 ---
@@ -108,21 +108,21 @@ To share builds before public marketplace approval:
    ```bash
    npx @vscode/vsce package --no-git-tag-version
    ```
-   This generates `murf32-<version>.vsix`.
+   This generates `mum32-<version>.vsix`.
 
 2. **Install on Mac**:
    ```bash
    # Antigravity IDE
-   "/Applications/Antigravity IDE.app/Contents/Resources/app/bin/antigravity-ide" --install-extension murf32-0.1.0.vsix --force
+   "/Applications/Antigravity IDE.app/Contents/Resources/app/bin/antigravity-ide" --install-extension mum32-0.1.0.vsix --force
 
    # Visual Studio Code
-   "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code" --install-extension murf32-0.1.0.vsix --force
+   "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code" --install-extension mum32-0.1.0.vsix --force
    ```
 
 3. **Install via IDE GUI**:
    - Open Extensions view (`Cmd+Shift+X`).
    - Click the `...` (Views and More Actions) menu in the top-right of the Extensions panel.
-   - Choose **Install from VSIX...** and select `murf32-0.1.0.vsix`.
+   - Choose **Install from VSIX...** and select `mum32-0.1.0.vsix`.
 
 ---
 

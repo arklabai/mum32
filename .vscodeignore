@@ -3,9 +3,9 @@
 src/**
 tsconfig.json
 .gitignore
-.murf32/**
+.mum32/**
 *.vsix
-MURF32-EXTENSION-PRD.md
+MUM32-EXTENSION-PRD.md
 webview-ui/src/**
 webview-ui/node_modules/**
 webview-ui/package*.json

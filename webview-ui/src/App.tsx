@@ -128,24 +128,24 @@ export const App: React.FC = () => {
       {/* App Header & Brand */}
       <header className="px-3 pt-3 pb-2 border-b border-white/5 flex items-center justify-between">
         <a
-          href="https://www.arklabai.com/murf32"
+          href="https://www.arklabai.com/mum32"
           target="_blank"
           rel="noreferrer"
           className="flex items-center gap-2 hover:opacity-85 transition-opacity text-inherit no-underline"
-          title="Visit https://www.arklabai.com/murf32"
+          title="Visit https://www.arklabai.com/mum32"
         >
           <div className="w-6 h-6 rounded-md bg-gradient-to-tr from-indigo-600 to-indigo-400 flex items-center justify-center shadow-lg shadow-indigo-500/30">
             <Sparkles size={13} className="text-white" />
           </div>
           <div>
             <h1 className="text-xs font-bold tracking-wide text-white flex items-center gap-1.5">
-              murf32
+              mum32
               <span className="text-[9px] font-mono font-normal px-1.5 py-0.2 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
                 v0.1.0
               </span>
             </h1>
-            <p className="text-[10px] text-indigo-300/60 hover:text-indigo-300 transition-colors">
-              arklabai.com/murf32 ↗
+            <p className="text-[10px] text-indigo-300/70 hover:text-indigo-200 transition-colors">
+              Beautiful AI Context Ledger & Memory
             </p>
           </div>
         </a>
